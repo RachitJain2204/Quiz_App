@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/Questions_Screen.dart';
-import 'Data/Questions.dart';
+import 'package:quiz_app/Screens/Questions_Screen.dart';
+import 'package:quiz_app/Screens/result_screen.dart';
+import '../Data/Questions.dart';
 import 'Start_Screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,20 +23,33 @@ class _HomeScreenState extends State<HomeScreen> {
     activeScreen = StartScreen(switchScreen);
   }
 
-  void switchScreen(){
+  void switchScreen() {
     setState(() {
-      activeScreen = QuestionsScreen(onSelectAnswer: chooseAnswer,);
+      activeScreen = QuestionsScreen(
+        onSelectAnswer: chooseAnswer,
+      );
     });
   }
 
-  void chooseAnswer(String answer){
+  void chooseAnswer(String answer) {
     selectedAnswers.add(answer);
-    if(selectedAnswers.length == questions.length){
+    if (selectedAnswers.length == questions.length) {
       setState(() {
-        selectedAnswers = [];
-        activeScreen = StartScreen(switchScreen);
+        activeScreen = ResultScreen(
+          chosenAnswers: selectedAnswers,
+          onRestart: restartQuiz,
+        );
       });
     }
+  }
+
+  void restartQuiz() {
+    setState(() {
+      selectedAnswers = [];
+      activeScreen = QuestionsScreen(
+        onSelectAnswer: chooseAnswer,
+      );
+    });
   }
 
   @override
